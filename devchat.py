@@ -4,6 +4,7 @@ import urllib
 import logging
 import pickle
 
+from google.appengine.api import mail
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
@@ -173,10 +174,16 @@ class UserProfileHandler(BaseRequestHandler):
     # Generate the user profile
     self.response.out.write(self.generate('user.html', template_values={'queried_user': greeting_user}))
 
+class SendEmail(BaseRequestHandler):
+
+    def post(self):
+        mail.send_mail(sender="jonatasemidio@gmail.com", to="jonatasemidio@gmail.com", subject="JESAPP", body="JESAPP")  
+        self.redirect('/')
+
                                                 
 application = webapp.WSGIApplication(
                                      [('/', MainRequestHandler),
-                                      ('/getchats', ChatsRequestHandler),
+                                      ('/email', SendEmail),
                                       ('/user/([^/]+)', UserProfileHandler),
                                       ('/edituser/([^/]+)', EditUserProfileHandler)],
                                      debug=True)
